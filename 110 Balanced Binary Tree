@@ -1,0 +1,49 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        
+        if(root == null) return true;
+        if(root.left == null &&  root.right == null) {return true;}
+        
+        // DFS
+        return ( isBalancedNode(root) && isBalanced(root.left) && isBalanced(root.right) );
+        
+    }
+  
+    private boolean isBalancedNode(TreeNode root){
+        if(root == null) return true;
+        if(root.left == null &&  root.right == null) return true;
+        
+        int lenL = length(root.left);
+        int lenR = length(root.right);
+        
+        return Math.abs(lenL - lenR) <= 1;    
+    }
+   
+    
+    private int length(TreeNode root){
+        
+        int len = 0;
+        
+        // end condition of recursive
+        if(root == null){
+            return 0;
+        }
+        else if(root.left == null && root.right == null) {
+            return 1;
+        } else {
+            // most important recursive euqation
+            len = Math.max( length(root.left), length(root.right)) + 1;
+        }
+        
+        return len;        
+    }
+}
