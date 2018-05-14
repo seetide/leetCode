@@ -1,0 +1,96 @@
+// neat solution from other people
+class Solution {
+    public int myAtoi(String str) {
+        int index = 0, sign = 1, total = 0;
+        
+        //1. Empty string
+        if(str.length()== 0 || str.trim().length() == 0) return 0;
+        
+        //2. Remove Spaces
+        while(str.charAt(index) == ' ' &&  index < str.length())
+            index++;
+        
+        //3. Handle signs
+        char c = str.charAt(index);
+        if(c == '+' || c == '-'){
+            sign = (c == '+') ? 1 : -1;
+            index++;
+        }
+        
+        //4. Convert number and avoid overflow
+        while(index < str.length()){
+            int digit = str.charAt(index) - '0';
+            
+            if(digit < 0 || digit > 9) break;
+            
+            // check if total will be overflow after 10 times and add digit
+            if(Integer.MAX_VALUE/10 < total || Integer.MAX_VALUE/10 == total && Integer.MAX_VALUE %10 < digit){
+                return sign == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            }
+            
+            total = total * 10 + digit;
+            index++;
+        }        
+        
+        
+        return total * sign;
+    }
+}
+
+// my tedious solution
+class Solution {
+    public int myAtoi(String str) {
+        if(str == null || str.length() == 0) return 0;
+        
+        long res = 0;
+        // find the first non-space char
+        
+        String s = str.trim();
+        if(s.length() == 0) return 0;
+        int n = s.length();
+        int sign = 1;
+        
+        // check the first char, +, -, number, other
+        if(s.charAt(0) == '+') {
+            sign = 1;
+            if(n > 1 && s.charAt(1)==0) return 0;
+        }
+        
+        else if(s.charAt(0) == '-') {
+            sign = -1;
+            if(n > 1 && s.charAt(1)==0) return 0;
+                                    }
+        else if(s.charAt(0) - '0' >= 0 && s.charAt(0) - '0' <= 9) {
+            res = s.charAt(0) - '0' + res * 10;          
+            
+        } 
+        else{
+            return (int)res;
+        }
+        
+        
+        
+        for(int i = 1; i < n; i++){
+            
+            if(res > Integer.MAX_VALUE){
+                if(sign == 1) return Integer.MAX_VALUE;
+                else if(sign == -1) return Integer.MIN_VALUE;
+            }
+            
+                if(s.charAt(i) - '0' >= 0 && s.charAt(i) - '0' <= 9){
+                    res = s.charAt(i) - '0' + res * 10;
+                    
+                } else{
+                    break;
+                }
+         }
+        
+        // convert the number, check whether it is in the correct range
+        if(res > Integer.MAX_VALUE){
+            if(sign == 1) return Integer.MAX_VALUE;
+            else if(sign == -1) return Integer.MIN_VALUE;
+        }
+        
+        return (int)res * sign;
+    }
+}
