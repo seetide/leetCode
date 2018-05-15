@@ -1,0 +1,129 @@
+// very consise code from other guy.
+class Solution {
+    public String intToRoman(int num) {
+      StringBuilder sb = new StringBuilder(); 
+      int[] values = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+      String[] strs = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+        
+        for(int i = 0; i < values.length; i++){
+            while(num >= values[i]){
+                num = num - values[i];
+                sb.append(strs[i]);
+            }
+        }
+        
+     return sb.toString();
+        
+    }
+}
+
+
+
+ // my long code
+class Solution {
+    public String intToRoman(int num) {
+     
+     
+        int n = 0;
+        StringBuilder sb = new StringBuilder();
+        
+        // 1. over 1000?
+        if(num >= 1000){
+            n = num / 1000;
+            num = num % 1000;
+            
+            for(int i = 0; i < n; i++)
+                sb.append("M");
+            
+        }
+        
+        //2. over 900?
+        if(num >= 900){
+            num = num - 900;
+            sb.append("CM");
+        }
+        
+        
+        //3. over 500 
+        if(num >= 500){
+            num = num - 500;
+            sb.append("D");
+        }
+            
+        
+        //4. over 400
+        if(num >= 400 ){
+            num = num - 400;
+            sb.append("CD");
+        }
+        
+        //5. over 100
+        if(num >= 100){
+            n = num / 100;
+            num = num % 100;
+            
+            for(int i = 0; i < n; i++)
+                sb.append("C");
+        }
+        
+        //6. over 90 
+        if(num >= 90){
+            num = num - 90;
+            sb.append("XC");
+        }
+        
+        //7. over 50
+        if(num >= 50){
+            num = num - 50;
+            sb.append("L");
+        }
+        
+        //8. over 40
+        if(num >= 40){
+            num = num - 40;
+            sb.append("XL");
+        }
+        
+        //9 over 10
+        if(num >= 10 ){
+            
+            sb = helper(num, 10, "X", sb);
+            n = num / 10;
+            num = num % 10;
+            for(int i = 0; i < n; i++){
+                sb.append("X");
+            }
+        }
+        
+        
+        
+        //10 over 9
+        if( num == 9 ){
+            sb.append("IX");
+            
+            return sb.toString();
+        }
+        //11 over 5 
+        if(num >= 5){
+            num = num - 5;
+            
+            sb.append("V");
+            
+        }
+        
+        //12 = 4
+        if(num == 4){
+            sb.append("IV");
+            return sb.toString();                
+        }
+        if(num > 0){
+            for(int i = 0; i < num; i++){
+                sb.append("I");
+            }
+        }
+        
+        return sb.toString();    
+            
+    }
+
+   
