@@ -1,0 +1,35 @@
+class Solution {
+    public double myPow(double x, int n) {
+    
+    // corner case treatment
+       if(n == Integer.MAX_VALUE){
+            return helper(x, n/2 ) * helper(x, n - n/2);
+        }
+        if(n == Integer.MIN_VALUE){
+            return 1 / helper(x, -n/2) *  1 / helper(x, -n + n / 2);
+        }
+               
+        if(n == 0) {return 1;}
+        else if (n == 1) { return x;}
+        
+        else if ( n > 1 ){
+            return helper(x, n);    
+        }
+        else {
+            return 1.0 / myPow(x, -n);
+        }
+    }
+    
+    double helper(double x, int n){      
+        
+        if(n == 0) return 1;
+        if(n == 1) return x;
+        
+        // this step decrease the repeating calculation
+        double temp = helper(x, n/2); 
+        
+        // here I do the recursive calculation.
+        if(n % 2 == 0) {return temp * temp;}
+        else  {return temp * temp * x;} 
+    }
+}
