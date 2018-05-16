@@ -1,0 +1,125 @@
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {        
+        
+        // 0. setup
+        int len = strs.length;        
+        List<List<String>> finalList = new ArrayList<List<String>>();  
+        if(len == 0) return finalList;
+        
+        
+        //1. sort the words with length 
+        Arrays.sort(strs, Comparator.comparingInt(String::length));
+        List<List<String>> tempList = new ArrayList<List<String>>();
+        
+        for(int i = 0, j = 0; i < strs.length; ){
+            List<String> subList = new ArrayList<String>();
+            
+            while( j < len && strs[i].length() == strs[j].length() ){
+                subList.add(strs[j]);
+                j++;
+            }
+            tempList.add(subList);
+            i = j; 
+        }
+        
+        
+        //2. call the subgroup method
+        //String[] arr = list.toArray(new String[list.size()]);
+        
+        for(int i = 0; i < tempList.size(); i++){
+            List<String> subTempList = tempList.get(i);
+            String[] curr = subTempList.toArray(new String[ subTempList.size() ]);
+            
+            List<List<String>> particalResult = subgroupAnagrams(curr);
+            
+            //3. combine the subgroup result.
+            finalList.addAll(particalResult);
+        }
+        
+        
+        
+        return finalList;
+        
+        
+    }
+
+
+    // find solution in the subgroup with same string length
+    public List<List<String>> subgroupAnagrams(String[] strs) {
+        int len = strs.length;
+        
+        Set<Integer> set = new HashSet<Integer>();
+        
+        List<List<String>> wrapList = new ArrayList<List<String>>();  
+        if(len == 0) return wrapList;
+        
+        
+        
+        // add the first word
+        List<String> subList = new ArrayList<String>();
+        subList.add(strs[0]);
+        wrapList.add(subList);
+        set.add(total(strs[0]));
+        
+        // add the following ones
+        for(int j = 1; j < strs.length; j++){
+            
+            String str = strs[j];
+
+            int i = 0;   
+            if(set.add( total(str) )){  // new word, must have a new list
+                List<String> newList = new ArrayList<String>();
+                newList.add(str);
+                wrapList.add(newList); 
+
+            } else { // could be new word but not sure, need to check one by one first!
+                for(; i < wrapList.size(); i++){
+                       if(isAnagrams(str, wrapList.get(i).get(0))){
+                           wrapList.get(i).add(str);
+                           break;
+                       }
+                 } 
+
+                 if(i == wrapList.size()){
+                    List<String> newList = new ArrayList<String>();
+                    newList.add(str);
+                    wrapList.add(newList);  
+                 }       
+
+            }                 
+           
+        }
+        
+        return wrapList;
+    }
+    
+    
+    public boolean isAnagrams(String s1, String s2){
+        // quick test
+        if(s1.length() != s2.length()) return false;
+        if(total(s1) != total(s2)) return false;
+        
+        int[] arr1 = new int[128];
+        int[] arr2 = new int[128];       
+        
+        // compare one by one
+        for(int i = 0; i < s1.length(); i++){
+            arr1[s1.charAt(i)]++;
+            arr2[s2.charAt(i)]++;
+        }
+        
+        for(int i = 0; i < s1.length(); i++){
+            if(arr1[s1.charAt(i)] != arr2[s1.charAt(i)]) return false;
+        }
+        return true;
+    }
+    
+    public int total(String s){
+        int sum = 0;
+        char[] arr =  s.toCharArray();
+        for(char c : arr){
+            sum += c - '0';
+        }
+        return sum;
+    }
+}
