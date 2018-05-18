@@ -1,0 +1,43 @@
+class Solution {
+    public void rotate(int[][] matrix) {
+        int n = matrix.length;
+        
+        for(int i = 0; i < n / 2; i++){
+            helper(matrix, i);
+        }
+    }
+    
+    void helper(int[][] matrix, int l){
+        
+        // the max value of current layer
+        int n = matrix.length - 1 - l;        
+        
+        int borderlen = matrix.length - 2*l;
+        
+        // only need to go borderlen -1 steps to complete the rotation.
+        for(int i = 0; i < borderlen - 1; i++){
+            
+            
+            //0. save top line left to right
+            int temp = matrix[l][l+i];
+            
+            //1. the top line(left to right)  get value from   left line( bottom to top)
+            // matrix[l][l+i]                                  matrix[n - i][l] 
+            matrix[l][l+i] =  matrix[n - i][l];
+            
+            //2 left line( bottom to top)   get value from  bottom line ( right to left)
+            // matrix[n - i][l]                             matrix[n][n - i]
+            matrix[n - i][l] = matrix[n][n - i]; 
+            
+            //3. bottom line         get value from right line 
+            //  matrix[n][n - i]                matrix[i + l][n]
+            matrix[n][n - i] = matrix[i + l][n];
+            
+            //4. right line get value from temp( top line saved)
+            //
+            matrix[i + l][n] = temp;
+        }
+         
+        
+    }
+}
