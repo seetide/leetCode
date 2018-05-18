@@ -1,0 +1,93 @@
+class Solution {
+    public String multiply(String num1, String num2) {
+        if(num1.charAt(0) - '0' == 0 || num2.charAt(0) - '0' == 0) return "0";
+        
+        Decimal d1 = new Decimal(num1);
+        Decimal d2 = new Decimal(num2);
+        
+        return d1.multiple(d2).s;
+    }
+
+}
+
+class Decimal {
+    String s;
+    
+    Decimal(String s) {
+        this.s = s;
+    }
+    
+    // make an int array to store the numbers in reverse direction.
+    // in this way, both the digit and it Decimal index are stored.
+    // it also help the calculation.
+    int[] intArr(Decimal d){
+        String s = d.s;
+        int len = s.length();
+        
+        int[] nums = new int[len];
+        
+        for(int i = len - 1; i >= 0; i--){
+            nums[len - 1 - i] = s.charAt(i) - '0';
+        }
+        
+        return nums;
+    }
+  /*  // this method is not used. But it is a very good practice before I find out how to handle the multiply.
+    	Decimal plus(Decimal d1) {
+
+      int[] nums1 = intArr(d1);
+      int[] nums2 = intArr(this);
+
+      int len = (nums1.length > nums2.length) ? nums1.length + 1 : nums2.length + 1;
+      StringBuilder sb = new StringBuilder();
+
+      int[] nums = new int[len];
+      int carry = 0;
+      for (int i = 0; i < len - 1; i++) {
+        int temp = nums1[i] + nums2[i] + carry;
+        nums[i] = temp % 10;
+        carry = temp / 10;
+        sb.append(nums[i]); // ?
+      }
+      if (carry != 0)
+        sb.append(carry);
+
+      return new Decimal(sb.reverse().toString());
+    }
+	*/
+    
+    Decimal multiple(Decimal d){
+        int[] nums1 = intArr(d);
+        int[] nums2 = intArr(this);
+        
+        int len1 = nums1.length;
+        int len2 = nums2.length;
+        int len3 = len1 + len2;
+        
+        int[] nums3 = new int[len3];
+        
+        // most important part of multiple. it simulate the natural multiple.
+        // the array index help the keep the decimal index
+        for(int i = 0; i < len1; i++){
+            for(int j = 0; j < len2; j++){
+                nums3[i+j] += nums1[i]* nums2[j];
+            }
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        int carry = 0;
+        
+        // turn the int array back to the string.
+        for(int i = 0; i < len3 -1; i++){
+            int temp = carry + nums3[i];
+            int dig = temp % 10;
+            carry = temp / 10;
+            
+            sb.append(dig);
+        }
+        
+        if(carry != 0) sb.append(carry);
+        
+        return new Decimal(sb.reverse().toString());
+    }
+}
