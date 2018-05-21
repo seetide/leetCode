@@ -1,0 +1,43 @@
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        
+        List<List<Integer>> list = new ArrayList<List<Integer>>();
+        int len = nums.length;
+        if (len < 3) return list;
+        Arrays.sort(nums);
+        
+        
+        for(int l = len - 1; l >= 2; l--){
+            if(nums[l] < 0) break;
+            int sum = -nums[l];
+            
+            for(int i = 0, j = l - 1; i < j; ){
+                if(nums[i] > 0) break;
+                if(nums[i] + nums[j] == sum){
+                   
+                    list.add(new ArrayList<Integer>(Arrays.asList(nums[i], nums[j], nums[l])));
+                    while(i + 1 < j &&  nums[i] == nums[i+1]) i++;
+                    i++;
+                    while(j - 1 > i && nums[j] == nums[j-1]) j--;
+                    j--;
+                }
+                else if(nums[i] + nums[j] > sum){
+                    while(j - 1 > i && nums[j] == nums[j-1]) j--;
+                    j--;
+                }
+                else{
+                    while(i + 1 < j && nums[i] == nums[i+1]) i++;
+                    i++;
+                }                
+                                
+            }
+            while(l-1 >=2 && nums[l] == nums[l-1]) l--;
+        }
+        
+        // after I check the repeat in the upper cycle,  the set is not needed. This will save a lot of time.
+        //Set<List<Integer>> set = new HashSet<List<Integer>>(list);
+        
+        
+        return list;
+    }
+}
