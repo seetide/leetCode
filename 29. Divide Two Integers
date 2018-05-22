@@ -1,0 +1,39 @@
+class Solution {
+    public int divide(int dividend, int divisor) {
+        if ( dividend == 0 ) return 0;
+        
+        // Reduce the problem to positive long integer to make it easier.
+        // Use long to avoid integer overflow cases.
+        
+        int sign = 1;
+        if( (dividend > 0 && divisor < 0) || (dividend < 0 && divisor > 0)){
+            sign = -1;
+        }
+        
+        long ldividend = Math.abs((long) dividend);
+        long ldivisor = Math.abs((long) divisor);
+        
+        long ans = sign * ldivide(ldividend, ldivisor);
+        
+        if (ans >= Integer.MAX_VALUE) return Integer.MAX_VALUE;
+        if (ans <= Integer.MIN_VALUE) return Integer.MIN_VALUE;
+        
+        return (int) (sign * ldivide(ldividend, ldivisor));
+    }
+    
+    public long ldivide (long ldividend, long ldivisor){
+                       
+        if (ldividend < ldivisor) return 0;
+        
+        
+        // This is the most creative way to minimise the calculation steps!
+        long sum = ldivisor;
+        long multiple = 1;
+        while((sum + sum) < ldividend){
+            sum += sum;
+            multiple += multiple;
+        }
+        // recursively call the function
+        return multiple + ldivide(ldividend - sum, ldivisor);
+    }
+}
