@@ -1,0 +1,24 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+    
+        // check the simplest situation
+        if (head == null || head.next == null) return head;
+        
+        // recursively call the function since the rest is the same question but smaller scale.
+        if(head.val != head.next.val) {
+            ListNode newnext = deleteDuplicates(head.next);
+            head.next = newnext;
+            return head;
+        }
+        
+        return deleteDuplicates(head.next);
+    }
+}
