@@ -1,0 +1,54 @@
+
+// best solution 7 ms
+public static boolean canJump(int[] nums) {
+        int leftMostGoodPosition = nums.length - 1;
+        
+        for(int i = nums.length - 1; i >= 0; i--){
+        	if(i + nums[i] >= leftMostGoodPosition){
+        		leftMostGoodPosition = i;
+        	}
+        }
+        
+        return leftMostGoodPosition == 0;
+    }
+
+
+
+// my solution  10 ms
+
+public boolean canJump(int[] nums) {
+        if(nums.length == 1) return true;
+        if(nums[0] == 0 ) return false;
+        
+        int len = nums.length;
+        
+        // the reachable status of each location
+        int[] dp = new int[len];
+        dp[0] = 1;
+        
+        for(int i = 1; i < len; i++){
+            
+            if(dp[i-1] == 1 && nums[i-1] > 0 ) {
+                dp[i] = 1; 
+                if(nums[i] + i >= len -1) return true;
+                continue;                               
+            }
+            
+            for(int j = i - 1; j >= 0; j--){
+                if(dp[j] == 0) continue;
+                else if(nums[j] + j >= i){
+                    dp[i] = dp[j];
+                    
+                    
+                    break;
+                }
+            
+                
+            }
+            
+            
+        }
+        
+        return dp[len - 1] > 0;
+    }
+    
