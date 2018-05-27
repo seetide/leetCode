@@ -1,0 +1,36 @@
+class Solution {
+    public String getPermutation(int n, int k) {
+        
+        // prepare the number list
+        List<Integer> numbers = new ArrayList<Integer>();
+        for(int i = 1; i <= n; i++){
+            numbers.add(i);
+        }
+        
+        // prepare the factorial of n.
+        int[] factorial = new int[n + 1];
+        
+        factorial[0] = 1;
+        int fa = 1;
+        for(int i = 1; i <= n; i++){
+            fa *= i;
+            factorial[i] = fa;
+        }
+        
+        // result prepare
+        StringBuilder sb = new StringBuilder();
+        
+        k = k - 1;
+        
+        for(int i = 1; i <= n; i++){
+            int index = k / factorial[n-i];
+            
+            sb.append(numbers.get(index));
+            numbers.remove(index);
+            k = k % factorial[n-i];
+        }
+        
+        return sb.toString();
+        
+    }
+}
