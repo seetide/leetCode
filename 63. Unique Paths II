@@ -1,0 +1,30 @@
+
+class Solution {
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        
+        if(obstacleGrid[0][0] == 1) return 0;
+        
+        int m = obstacleGrid.length,  n = obstacleGrid[0].length;
+        
+        // 1. prepare a 2d dp array to save the number of path of current grid.
+        //  use padding on the top and left to simplify the cornor case.
+        int[][] dp = new int[m + 1][n + 1];
+        
+        
+        dp[0][1] = 1; // give a inital 1 to the start point.
+
+        
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(obstacleGrid[i][j] != 1){
+                    // get way from above + left
+                    dp[i + 1][j + 1] = dp[i][j + 1] + dp[i + 1][j];  
+                } else { // no way
+                    dp[i + 1][j + 1] = 0;
+                }
+            }
+        }
+        
+        return dp[m][n];
+    }
+}
