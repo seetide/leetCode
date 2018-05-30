@@ -1,0 +1,72 @@
+class Solution {
+    public List<List<String>> solveNQueens(int n) {
+        
+        List<List<String>> result = new ArrayList<>();
+        
+        List<List<Character>> empty = new ArrayList<>();
+        for(int i = 0; i < n; i++){
+            empty.add(new ArrayList<Character>());
+            for(int j = 0; j < n; j++){
+                empty.get(i).add('.');
+            }
+        }
+        
+        
+        fillQ(empty, 0, n, result);
+        
+        return result;
+        
+    }
+    
+    // for recursive function, since there are more return point, we need to make the function void for return type.
+    // At begining, I was confused about how to put the return and where to put the return. #####
+    // 
+    // Use the Collection type List<List<String>> in the function parameter to save all possible results.
+    public void fillQ(List<List<Character>> list, int row, int n, List<List<String>> res){
+        
+        if(row == n){                                                   //end condition
+            List<String> subList =  new ArrayList<String>();
+            for(int i = 0; i < n; i++){
+                StringBuilder sb = new StringBuilder();
+                for(int j = 0; j < n; j++){
+                    sb.append(list.get(i).get(j));
+                }
+                subList.add(sb.toString());
+            }
+            res.add(subList);
+            return;
+        }
+        
+        // Here only need one for cycle from left to right. The backtracing will go down the rows.
+        for(int j = 0; j < n; j++){
+            if(isValid(list, row, j, n)){
+                list.get(row).set(j, 'Q');
+                List<List<Character>> temp = new ArrayList<>();
+                temp.addAll(list);
+                fillQ(temp, row + 1, n, res);                        // recursive call
+                    
+                list.get(row).set(j, '.');                           // backtrack
+            }
+        }
+        
+    }
+    
+    public boolean isValid(List<List<Character>> list, int row, int col, int n){
+        
+        for(int i = 0; i <= row; i++){
+            if(list.get(i).get(col) == 'Q') return false;
+        }
+        
+        int x = row, y = col;
+        while(x >= 0 && y >= 0){
+            if(list.get(x--).get(y--) == 'Q') return false;
+        }
+        
+        x = row; y = col;
+        while(x >= 0 && y < n){
+            if(list.get(x--).get(y++) == 'Q') return false;
+        }
+        
+        return true;
+    }
+}
