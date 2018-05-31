@@ -1,0 +1,46 @@
+// recursive solution with some pre knowledge
+class Solution {
+    public boolean isHappy(int n) {
+      if(n < 10){
+        if(n == 1 || n == 7) {
+          return true;
+        } else return false;
+      }
+      
+      int sum = 0;
+      while(n > 0){
+        sum += (n%10) * (n%10);
+        n = n/10;
+      }
+      
+      return isHappy(sum);
+      
+    }
+}    
+
+// my brute force solution
+class Solution {
+    public boolean isHappy(int n) {
+       
+        
+        int temp = n;
+        HashSet<Integer> set = new HashSet<>();
+        set.add(temp);
+        while(set.add( trans(temp) )){
+            temp = trans(temp);
+        }
+        
+        return set.contains(1) ;
+        
+    }
+    
+    public int trans(int n){
+        int next = 0;
+        while(n > 0){
+            
+            next = next + (n % 10) * (n % 10);
+            n = n / 10;
+        } 
+        return next;
+    }
+}
