@@ -1,0 +1,77 @@
+
+// one line solution
+class Solution {
+    public int rangeBitwiseAnd(int m, int n) {  
+       return m == n ? m : rangeBitwiseAnd(m >> 1, n >> 1) << 1;       
+    }       
+}
+
+
+// my last version 30ms
+class Solution {
+    public int rangeBitwiseAnd(int m, int n) {
+       if(m == 0)  return 0;
+       if(m == n) return m;        
+        
+        int lo = 0;
+        // this part is very important!!!!!!!!
+        int diff = n - m + m % 2;
+        
+        while( diff > 0){
+            diff >>= 1;
+            lo++;
+        }
+        
+        
+        return (rangeBitwiseAnd(m >> lo, n >> lo) << lo );        
+       
+    }    
+   
+}
+
+// my first accepted version. Although it is accepted, I am still not clear at that stage.
+class Solution {
+    public int rangeBitwiseAnd(int m, int n) {
+       if(m == 0)  return 0;
+       if(m == n) return m;
+        /*  This part is used at the beginning, but I found it can be omitted.
+        int[] mArray = toBit(m); 
+        
+        int hi = 30;
+        for(int i = 30; i >=0; i--){
+            if( mArray[i] != 0) {
+                hi = i;
+                break;
+            }
+        }
+        
+        */
+        int lo = 0;
+        
+        int diff = n - m + m % 2;
+        
+        while( diff > 0){
+            diff = diff >> 1;
+            lo++;
+        }
+        
+        //if(hi < lo) return 0;
+        //if(n >= Math.pow(2,hi+1) ) return 0;
+        
+        return (rangeBitwiseAnd(m >> lo, n >> lo) << lo );
+        
+       
+    }
+    
+    public int[] toBit(int x){
+       int[] res = new int[31];
+        int i = 0;
+        while(x > 0){
+            res[i++] = x % 2;
+            x = x / 2;
+        }
+        
+        return res;
+    }
+  
+}
