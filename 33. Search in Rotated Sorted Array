@@ -1,0 +1,71 @@
+// recursive v2     16ms
+
+class Solution {
+    public int search(int[] nums, int target) {
+       return  binary(nums, target, 0, nums.length - 1);
+        
+    }
+    
+    public int binary(int[] nums, int target, int lo, int hi){
+        if (hi < lo ) return -1;
+        if(hi == lo){
+             if(nums[lo] == target) return lo;
+             if(nums[lo] != target) return -1;
+        }
+         
+        
+        int mid = (hi - lo)/2 + lo;
+        
+        if(target != nums[mid]) {
+            int left = binary(nums, target, lo, mid - 1);
+            int right = binary(nums, target, mid + 1, hi);
+            
+            return Math.max(left, right);    
+        }
+        else  return mid;   
+    }
+}
+
+
+// recursive v1    15ms
+class Solution {
+    public int search(int[] nums, int target) {
+       return  binary(nums, target, 0, nums.length - 1);
+        
+    }
+    
+    public int binary(int[] nums, int target, int lo, int hi){
+        
+        if(lo <= hi ){
+            int mid = (hi - lo) / 2 + lo;
+            if(nums[mid] == target) return mid;
+
+            if(nums[mid] > target){
+               if(nums[mid] < nums[lo]){
+
+                   return binary(nums, target, lo, mid-1);
+                  
+               }
+               else {
+                   return Math.max(binary(nums, target, lo, mid-1), binary(nums, target, mid+1, hi));
+               } 
+                
+
+            }
+
+            if(nums[mid] < target){
+                if(nums[mid] < nums[lo]){
+                    return Math.max(binary(nums, target, lo, mid-1), binary(nums, target, mid+1, hi));
+                }
+                else{
+                    
+                   return  binary(nums, target, mid+1, hi);
+                }
+                
+            }
+        }
+        
+        
+        return -1;
+    }
+}
