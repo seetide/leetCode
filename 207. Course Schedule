@@ -1,0 +1,92 @@
+
+// 13ms
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        
+         if (numCourses <= 0 || prerequisites == null) return false;
+       if (prerequisites.length == 0) return true;
+       int[] inDegree = new int[numCourses];
+       List<List<Integer>> graph = new ArrayList<>();
+       
+       for (int i = 0; i < numCourses; i++) graph.add(new ArrayList<Integer>());
+       for (int i = 0; i < prerequisites.length; i++) {
+           inDegree[prerequisites[i][0]]++;
+           graph.get(prerequisites[i][1]).add(prerequisites[i][0]);  // This is the magic step
+       }
+       
+       Queue<Integer> q = new LinkedList<>();
+       for (int i = 0; i < numCourses; i++) {
+           if (inDegree[i] == 0) q.offer(i);
+       }
+       
+       List<Integer> res = new ArrayList<>();
+       while (!q.isEmpty()) {
+           int num = q.poll();
+           res.add(num);
+           for (int i : graph.get(num)) {
+               inDegree[i]--;
+               if (inDegree[i] == 0) {
+                   q.offer(i);
+               }
+           }
+       }
+       return res.size() == numCourses;
+    }
+}
+
+// my 90ms
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        
+        if(numCourses <= 0 || prerequisites == null) return false;
+        if(prerequisites.length == 0) return true;
+        
+        HashSet[] graph = new HashSet[numCourses];
+        
+        int[] indegree = new int[numCourses];
+        Queue<Integer> queue = new LinkedList<Integer>();
+        int count = numCourses;
+        
+        // graph initialization
+        for(int i = 0; i < numCourses; i++){
+            graph[i] = new HashSet();
+        }
+        // add edge to the graph
+        for(int i = 0; i < prerequisites.length; i++){
+            
+            int x = prerequisites[i][0];
+            int y = prerequisites[i][1];
+            
+            graph[x].add(y);    // this step cause the time cost in the queue
+            indegree[x]++;
+        }
+        
+        for(int i = 0; i < numCourses; i++){
+            if(indegree[i] == 0){
+                queue.add(i);
+                count--;
+            }
+        }
+        
+        while(queue.size() != 0){
+            int course = queue.poll();
+            
+            for(int i = 0; i < graph.length; i++){
+                HashSet curr = graph[i];
+                
+                if(curr.remove(course)){
+                   indegree[i]--;
+                        
+                        if(indegree[i] == 0){
+                            queue.add(i);
+                            count--;
+                        } 
+                   
+                }                
+            }
+        }
+        
+        return count == 0;      
+        
+    }
+}
