@@ -1,0 +1,71 @@
+// 4ms  two pointer
+
+class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        int n = nums.length;
+        
+        int ans = Integer.MAX_VALUE;
+        
+        int left = 0;
+        int sum = 0;
+        
+        for(int i = 0; i < n; i++){
+            sum += nums[i];
+            
+            while(sum >= s){
+                ans = Math.min(ans, i + 1 - left);
+                sum = sum - nums[left++]; 
+            }
+        }
+        
+        return (ans != Integer.MAX_VALUE) ? ans : 0;
+    }
+}
+
+// 200 ms liner scan of cumulative sum.
+
+class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        if(nums == null || nums.length == 0) return 0;
+        int n = nums.length;
+		int min = n;
+
+		int[] sum = new int[n+ 1];
+		sum[0] = 0;
+
+		for (int i = 1; i <= n; i++) {
+			if (nums[i - 1] >= s)
+				return 1;
+
+			sum[i] = sum[i - 1] + nums[i - 1];
+
+		}
+		
+
+		if (sum[n] < s)
+			return 0;
+
+		for (int i = 0; i <= n; i++) {			
+			int k = n;	
+			
+			int sumTemp = sum[k] - sum[i]; // sum of i + 1 to k
+
+			
+			if (sumTemp >= s) {
+				while (sumTemp >= s && k > i) {					
+					k--;					
+					sumTemp = sum[k] - sum[i];			
+				}
+
+				int temp = k - i + 1;
+
+				if (temp < min)
+					min = temp;
+        } else {
+          break;
+        }
+
+		}      
+     return min;
+    }
+}
