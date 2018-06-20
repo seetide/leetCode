@@ -1,0 +1,49 @@
+// binary search with recursive call
+class Solution {
+    public int hIndex(int[] citations) {
+        int N = citations.length;
+        if(citations == null || N == 0) return 0;
+        
+        if(citations[0] >= N) return N;
+        if(citations[N - 1] == 0) return 0;
+        
+        if(N == 1) return 1;
+        return binary(citations, 0, N - 1, N);
+    }
+    
+    public int binary(int[] nums, int lo, int hi, int N){
+                    
+        int mid = (hi - lo) / 2 + lo;
+        if(nums[mid] >= N - mid && nums[mid - 1] < N - mid + 1) return N - mid;
+        if(nums[mid] >= N - mid) return binary(nums, lo, mid - 1, N);
+        else return binary(nums, mid + 1, hi, N);
+    }
+}
+
+
+// binary search with cycle
+
+class Solution {
+    public int hIndex(int[] citations) {
+        int n = citations.length;
+        
+        int start = 0, end = n - 1;
+        
+        while( start <= end ){
+            int mid = start + (end - start) / 2;
+            
+            if(citations[mid] == n - mid) return n - mid;
+            
+            else if(citations[mid] > n - mid){
+                end = mid - 1;
+            }
+            else{
+                start = mid + 1;
+            }
+        }
+        
+        return n - start;
+    }
+    
+    
+}
