@@ -22,6 +22,7 @@ class Solution {
         if(memo[left][right] > 0) return memo[left][right];
         
         int ans = 0;
+        // ith balloon is the last ballon to be burst.
         for(int i = left + 1; i < right; i++){
             ans = Math.max(ans, nums[left] * nums[i] * nums[right] + 
                           burst(memo, nums, left, i) + burst(memo, nums, i, right));
