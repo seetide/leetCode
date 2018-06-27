@@ -1,0 +1,72 @@
+// my general operation // 86ms
+class Solution {
+    public int maxProduct(String[] words) {
+        int max = 0;
+        int n = words.length;
+        if(words == null || n < 2) return 0;
+        
+        Arrays.sort(words);
+        
+        
+        int[][] countList = new int[n][];
+        for(int i = 0; i < n; i++){
+            countList[i] = letterCount(words[i]);
+        }
+        
+       
+        for(int i = 0; i < n; i++){
+            int countMax = 0;
+            for(int j = i+1; j < n; j++){
+                if(!hasCommon(countList[i], countList[j])){
+                    countMax = Math.max(countMax, words[j].length());
+                }
+            }
+            
+            
+            max = Math.max(max, words[i].length() * countMax);
+        }
+        
+        return max;        
+        
+    }
+    
+    public int[] letterCount(String s){
+        int[] count = new int[26];
+        
+        for(int i = 0; i < s.length(); i++){
+            count[s.charAt(i) - 'a']++; 
+        }
+        return count;
+    }
+    
+    public boolean hasCommon(int[] arr1, int[] arr2){
+        for(int i = 0; i < 26; i++){
+            if(arr1[i] > 0 && arr2[i] > 0) return true;
+        }
+        return false;
+    }
+}
+
+// bit operation 20ms
+public int maxProduct(String[] words) {
+		int[] nums = new int[words.length];
+		for(int i= 0; i < nums.length; i++) {
+			int temp = 0;
+			for(char c : words[i].toCharArray()) {
+				temp |= 1 << (c - 'a');
+			}
+			nums[i] = temp;
+		}
+		
+		int res = 0;
+		
+		for(int i = 0; i < words.length; i++) {
+			for(int j = i + 1; j < words.length; j++) {
+				if((nums[i] & nums[j]) == 0) {
+					res = Math.max(res, words[i].length() * words[j].length());
+				}
+			}
+		}
+		
+		return res;
+	}
