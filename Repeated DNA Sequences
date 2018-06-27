@@ -1,0 +1,33 @@
+class Solution {
+    public List<String> findRepeatedDnaSequences(String s) {
+        Set<Integer> words = new HashSet<>();
+        Set<Integer> doubles = new HashSet<>();
+        
+        List<String> res = new ArrayList<String>();
+        
+        char[] map = new char[26];
+        // set up the corresponding integer value for the char with map
+        map['A' - 'A'] = 0;
+        map['C' - 'A'] = 1;
+        map['G' - 'A'] = 2;
+        map['T' - 'A'] = 3;
+        
+        for(int i = 0; i < s.length() - 9; i++){
+            int v = 0;
+            for(int j = i; j < i + 10; j++){
+            // shift 2 in bit for the new char.
+            // this is a very typical bit operation for saving the sequence information in a bit value.
+                v <<= 2;
+                v |= map[s.charAt(j) - 'A'];
+            }
+            
+            // only when repeated, the v will be added and the repeated string. elegant design
+            if(!words.add(v) && doubles.add(v)){
+                res.add(s.substring(i, i+10));
+            }
+        }      
+        
+        
+        return res;
+    }
+}
