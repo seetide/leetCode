@@ -1,0 +1,72 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean findTarget(TreeNode root, int k) {
+        //if(root == null) return false;        
+        //if(root.left == null && root.right == null) return false;
+        
+       return preorder(root, root, k);       
+    }
+    // DFS
+    private boolean preorder(TreeNode root, TreeNode node, int k){
+        if(node == null) return false;
+        int target = k - node.val;
+        
+        if(target != node.val && contain(root, target)) return true;
+        
+        if(preorder(root, node.left, k)) return true;
+        
+        if(preorder(root, node.right, k)) return true;
+        
+        return false;
+    }
+    
+    private boolean contain(TreeNode root, int x){
+        if(root == null) return false;
+        if(root.val == x) return true;
+        if(root.val > x) {
+            return contain(root.left, x);
+        }else{
+            return contain(root.right, x);
+        }
+    }
+}
+
+
+// My BFS solution
+class Solution {
+    public boolean findTarget(TreeNode root, int k) {
+        //if(root == null) return false;        
+        //if(root.left == null && root.right == null) return false;
+        
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        
+        queue.offer(root);
+        
+        while(!queue.isEmpty()){
+            TreeNode curr = queue.poll();
+            if(  k != curr.val * 2 && contain(root, k - curr.val) ) return true;
+            if(curr.left != null) queue.offer(curr.left);
+            if(curr.right != null) queue.offer(curr.right);
+        }
+        
+        return false;
+    }
+    
+    private boolean contain(TreeNode root, int x){
+        if(root == null) return false;
+        if(root.val == x) return true;
+        if(root.val > x) {
+            return contain(root.left, x);
+        }else{
+            return contain(root.right, x);
+        }
+    }
+}
