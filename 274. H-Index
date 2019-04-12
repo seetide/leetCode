@@ -42,6 +42,54 @@ class Solution {
     }    
 }
 
+// 2ms
+// By omit the self define comparator, the speed is improved 10 times!!!!!!!!!!!!!!
+public int hIndex(int[] citations) {
+       if(citations == null || citations.length == 0) return 0;
+               
+        PriorityQueue<Integer> pq = new PriorityQueue<Integer>();
+        for(int i : citations){
+            pq.offer(-i);
+        }
+        
+        int n = 1;
+        while(!pq.isEmpty()){
+            
+            int citation = pq.poll();
+            
+            if(-citation >= n) {n++;}
+            else break;
+        }
+        return n-1;
+    }
+
+// 33ms
+    public int hIndex(int[] citations) {
+       if(citations == null || citations.length == 0) return 0;
+        if(citations.length  == 1) {
+            if(citations[0] == 0) return 0;   
+            else return 1;
+            
+        }
+        
+        PriorityQueue<Integer> pq = new PriorityQueue<Integer>((a, b)->(b - a));
+        for(int i : citations){
+            pq.offer(i);
+        }
+        
+        
+        
+        int n = 1;
+        while(!pq.isEmpty()){
+            
+            int citation = pq.poll();
+            
+            if(citation >= n) {n++;}
+            else break;
+        }
+        return n-1;
+    }
+
 
 //Time: O(n), Space: O(n)
 class Solution {
